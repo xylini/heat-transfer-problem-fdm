@@ -58,21 +58,24 @@ program main
     X(:) = 0
     X(N) = 1
     h = 1./N
-    P1 = 1/(h*h)
-    P2 = -2/(h*h)
-
-    A(1,1) = P2
-    A(2,1) = P1
-
+    P1 = 1 / (h * h)
+    P2 = -2 / (h * h)
 
     do I = 1,N
-        A(I-1,I) = P1
+        if (I /= N) then
+            A(I,I+1) = P1
+        end if
+        if (I /= 1) then
+            A(I,I-1) = P1
+        end if
         A(I,I) = P2
-        A(I+1,I) = P1
     end do
 
-    call eliminate(A,X,N-1)
 
-    write(*,*) A
+
+    call eliminate(A,X,N)
+    write(*,*) X
+
+
 
 end program main
