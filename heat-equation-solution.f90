@@ -22,7 +22,7 @@ contains
         implicit none
         integer (kind = 8) :: I, J
         real(kind = PRECISION) :: C
-        integer (kind = 8), intent(in) :: N
+        integer, intent(in) :: N
         real(kind = PRECISION), intent(inout) :: A(N, N), X(N)
         do I = 1,N
             do J = 1,N
@@ -48,6 +48,7 @@ program main
     character(10) :: value
     real (kind = PRECISION), allocatable :: A(:, :), X(:)
     real (kind = PRECISION)              :: h,P1,P2 !P1 takie samo jak P3 wiec wystarczy jedno
+    real(kind = 16) :: epsilon
 
     call get_command_argument(1, value)
     call str2int(value,N)
@@ -72,9 +73,21 @@ program main
     end do
 
 
+    epsilon = 0
 
     call eliminate(A,X,N)
+
+    do I = 1,N
+        epsilon = epsilon + abs(X(I) - real(i)/real(N))
+    end do
+    epsilon = epsilon / (N-2)
+
+    write(*,*) epsilon
     write(*,*) X
+
+
+    deallocate(A)
+    deallocate(X)
 
 
 
